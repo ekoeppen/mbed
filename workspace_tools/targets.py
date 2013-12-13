@@ -250,6 +250,17 @@ class STM32F407(Target):
         self.supported_toolchains = ["ARM", "GCC_ARM"]
 
 
+class STM32F103(Target):
+    def __init__(self):
+        Target.__init__(self)
+
+        self.core = "Cortex-M3"
+
+        self.extra_labels = ['STM', 'STM32F1XX']
+
+        self.supported_toolchains = ["GCC_ARM"]
+
+
 class MBED_MCU(Target):
     def __init__(self):
         Target.__init__(self)
@@ -317,6 +328,7 @@ TARGETS = [
     LPC4088(),
     LPC4330_M4(),
     STM32F407(),
+    STM32F103(),
     MBED_MCU(),
     LPC1347(),
     LPC1114(),
