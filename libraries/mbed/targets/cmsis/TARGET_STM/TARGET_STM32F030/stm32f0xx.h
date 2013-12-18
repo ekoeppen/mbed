@@ -4,19 +4,19 @@
   * @author  MCD Application Team
   * @version V1.2.0
   * @date    01-August-2013
-  * @brief   CMSIS Cortex-M0 Device Peripheral Access Layer Header File. 
-  *          This file contains all the peripheral register's definitions, bits 
-  *          definitions and memory mapping for STM32F0xx devices.  
-  *          
+  * @brief   CMSIS Cortex-M0 Device Peripheral Access Layer Header File.
+  *          This file contains all the peripheral register's definitions, bits
+  *          definitions and memory mapping for STM32F0xx devices.
+  *
   *          The file is the unique include file that the application programmer
   *          is using in the C source code, usually in main.c. This file contains:
   *           - Configuration section that allows to select:
   *              - The device used in the target application
-  *              - To use or not the peripheral’s drivers in application code(i.e. 
-  *                code will be based on direct access to peripheral’s registers 
-  *                rather than drivers API), this option is controlled by 
+  *              - To use or not the peripheral’s drivers in application code(i.e.
+  *                code will be based on direct access to peripheral’s registers
+  *                rather than drivers API), this option is controlled by
   *                "#define USE_STDPERIPH_DRIVER"
-  *              - To change few application-specific parameters such as the HSE 
+  *              - To change few application-specific parameters such as the HSE
   *                crystal frequency
   *           - Data structures and the address mapping for all peripherals
   *           - Peripheral's registers declarations and bits definition
@@ -33,8 +33,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -49,25 +49,25 @@
 /** @addtogroup stm32f0xx
   * @{
   */
-    
+
 #ifndef __STM32F0XX_H
 #define __STM32F0XX_H
 
 #ifdef __cplusplus
  extern "C" {
-#endif 
-  
+#endif
+
 /** @addtogroup Library_configuration_section
   * @{
   */
-  
-/* Uncomment the line below according to the target STM32F0 device used in your 
-   application 
+
+/* Uncomment the line below according to the target STM32F0 device used in your
+   application
   */
 
 #if !defined (STM32F0XX_LD)  && !defined (STM32F0XX_MD) && !defined (STM32F030X8) && !defined (STM32F030X6)
   /* #define STM32F0XX_LD */ /*!< STM32F0xx Low-density devices are STM32F050xx and STM32F060xx microcontrollers where the Flash memory ranges between 16 and 32 Kbytes */
-  /* #define STM32F0XX_MD */     /*!< STM32F0xx Medium-density devices are STM32F051xx and STM32F061xx microcontrollers where the Flash memory ranges between 16 and 64 Kbytes */  
+  /* #define STM32F0XX_MD */     /*!< STM32F0xx Medium-density devices are STM32F051xx and STM32F061xx microcontrollers where the Flash memory ranges between 16 and 64 Kbytes */
   /* #define STM32F030X6 */ /*!< STM32F030x6 devices are STM32F030xx microcontrollers where the Flash memory ranges between 16 and 32 Kbytes */
   #define STM32F030X8  /*!< STM32F030x8 devices are STM32F030xx microcontrollers where the Flash memory ranges between 16 and 64 Kbytes */
 #endif
@@ -89,58 +89,58 @@
 #if !defined  USE_STDPERIPH_DRIVER
 /**
  * @brief Comment the line below if you will not use the peripherals drivers.
-   In this case, these drivers will not be included and the application code will 
-   be based on direct access to peripherals registers 
+   In this case, these drivers will not be included and the application code will
+   be based on direct access to peripherals registers
    */
   /*#define USE_STDPERIPH_DRIVER*/
 #endif /* USE_STDPERIPH_DRIVER */
 
 /**
  * @brief In the following line adjust the value of External High Speed oscillator (HSE)
-   used in your application 
-   
+   used in your application
+
    Tip: To avoid modifying this file each time you need to use different HSE, you
         can define the HSE value in your toolchain compiler preprocessor.
   */
-#if !defined  (HSE_VALUE)     
+#if !defined  (HSE_VALUE)
 #define HSE_VALUE    ((uint32_t)8000000) /*!< Value of the External oscillator in Hz*/
 #endif /* HSE_VALUE */
 
 /**
- * @brief In the following line adjust the External High Speed oscillator (HSE) Startup 
-   Timeout value 
+ * @brief In the following line adjust the External High Speed oscillator (HSE) Startup
+   Timeout value
    */
 #if !defined  (HSE_STARTUP_TIMEOUT)
 #define HSE_STARTUP_TIMEOUT   ((uint16_t)0x5000) /*!< Time out for HSE start up */
 #endif /* HSE_STARTUP_TIMEOUT */
 
 /**
- * @brief In the following line adjust the Internal High Speed oscillator (HSI) Startup 
-   Timeout value 
+ * @brief In the following line adjust the Internal High Speed oscillator (HSI) Startup
+   Timeout value
    */
 #if !defined  (HSI_STARTUP_TIMEOUT)
 #define HSI_STARTUP_TIMEOUT   ((uint16_t)0x5000) /*!< Time out for HSI start up */
 #endif /* HSI_STARTUP_TIMEOUT */
 
-#if !defined  (HSI_VALUE) 
+#if !defined  (HSI_VALUE)
 #define HSI_VALUE  ((uint32_t)8000000) /*!< Value of the Internal High Speed oscillator in Hz.
                                              The real value may vary depending on the variations
                                              in voltage and temperature.  */
 #endif /* HSI_VALUE */
 
-#if !defined  (HSI14_VALUE) 
+#if !defined  (HSI14_VALUE)
 #define HSI14_VALUE ((uint32_t)14000000) /*!< Value of the Internal High Speed oscillator for ADC in Hz.
                                              The real value may vary depending on the variations
                                              in voltage and temperature.  */
 #endif /* HSI14_VALUE */
 
-#if !defined  (LSI_VALUE) 
+#if !defined  (LSI_VALUE)
 #define LSI_VALUE  ((uint32_t)40000)    /*!< Value of the Internal Low Speed oscillator in Hz
                                              The real value may vary depending on the variations
                                              in voltage and temperature.  */
 #endif /* LSI_VALUE */
 
-#if !defined  (LSE_VALUE) 
+#if !defined  (LSE_VALUE)
 #define LSE_VALUE  ((uint32_t)32768)    /*!< Value of the External Low Speed oscillator in Hz */
 #endif /* LSE_VALUE */
 
@@ -150,7 +150,7 @@
 #define __STM32F0XX_STDPERIPH_VERSION_MAIN   (0x01) /*!< [31:24] main version */
 #define __STM32F0XX_STDPERIPH_VERSION_SUB1   (0x02) /*!< [23:16] sub1 version */
 #define __STM32F0XX_STDPERIPH_VERSION_SUB2   (0x00) /*!< [15:8]  sub2 version */
-#define __STM32F0XX_STDPERIPH_VERSION_RC     (0x00) /*!< [7:0]  release candidate */ 
+#define __STM32F0XX_STDPERIPH_VERSION_RC     (0x00) /*!< [7:0]  release candidate */
 #define __STM32F0XX_STDPERIPH_VERSION        ((__STM32F0XX_STDPERIPH_VERSION_MAIN << 24)\
                                              |(__STM32F0XX_STDPERIPH_VERSION_SUB1 << 16)\
                                              |(__STM32F0XX_STDPERIPH_VERSION_SUB2 << 8)\
@@ -165,8 +165,8 @@
   */
 
 /**
- * @brief STM32F0xx Interrupt Number Definition, according to the selected device 
- *        in @ref Library_configuration_section 
+ * @brief STM32F0xx Interrupt Number Definition, according to the selected device
+ *        in @ref Library_configuration_section
  */
 #define __CM0_REV                 0 /*!< Core Revision r0p0                            */
 #define __MPU_PRESENT             0 /*!< STM32F0xx do not provide MPU                  */
@@ -251,7 +251,7 @@ typedef enum IRQn
 
 /** @addtogroup Exported_types
   * @{
-  */  
+  */
 
 typedef enum {RESET = 0, SET = !RESET} FlagStatus, ITStatus;
 
@@ -262,10 +262,10 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrorStatus;
 
 /** @addtogroup Peripheral_registers_structures
   * @{
-  */   
+  */
 
-/** 
-  * @brief Analog to Digital Converter  
+/**
+  * @brief Analog to Digital Converter
   */
 
 typedef struct
@@ -290,8 +290,8 @@ typedef struct
   __IO uint32_t CCR;
 } ADC_Common_TypeDef;
 
-/** 
-  * @brief HDMI-CEC 
+/**
+  * @brief HDMI-CEC
   */
 
 typedef struct
@@ -305,7 +305,7 @@ typedef struct
 }CEC_TypeDef;
 
 /**
-  * @brief Comparator 
+  * @brief Comparator
   */
 
 typedef struct
@@ -314,8 +314,8 @@ typedef struct
 } COMP_TypeDef;
 
 
-/** 
-  * @brief CRC calculation unit 
+/**
+  * @brief CRC calculation unit
   */
 
 typedef struct
@@ -330,7 +330,7 @@ typedef struct
 } CRC_TypeDef;
 
 
-/** 
+/**
   * @brief Digital to Analog Converter
   */
 
@@ -347,7 +347,7 @@ typedef struct
   __IO uint32_t SR;           /*!< DAC status register,                                      Address offset: 0x34 */
 } DAC_TypeDef;
 
-/** 
+/**
   * @brief Debug MCU
   */
 
@@ -359,7 +359,7 @@ typedef struct
   __IO uint32_t APB2FZ;       /*!< Debug MCU APB2 freeze register,              Address offset: 0x0C */
 }DBGMCU_TypeDef;
 
-/** 
+/**
   * @brief DMA Controller
   */
 
@@ -377,7 +377,7 @@ typedef struct
   __IO uint32_t IFCR;         /*!< DMA interrupt flag clear register,                        Address offset: 0x04 */
 } DMA_TypeDef;
 
-/** 
+/**
   * @brief External Interrupt/Event Controller
   */
 
@@ -391,7 +391,7 @@ typedef struct
   __IO uint32_t PR;           /*!<EXTI Pending register,                                    Address offset: 0x14 */
 }EXTI_TypeDef;
 
-/** 
+/**
   * @brief FLASH Registers
   */
 typedef struct
@@ -408,7 +408,7 @@ typedef struct
 } FLASH_TypeDef;
 
 
-/** 
+/**
   * @brief Option Bytes Registers
   */
 typedef struct
@@ -420,9 +420,9 @@ typedef struct
   __IO uint16_t WRP0;         /*!<FLASH option byte write protection 0,          Address offset: 0x08 */
   __IO uint16_t WRP1;         /*!<FLASH option byte write protection 1,          Address offset: 0x0C */
 } OB_TypeDef;
-  
 
-/** 
+
+/**
   * @brief General Purpose IO
   */
 
@@ -444,7 +444,7 @@ typedef struct
   uint16_t RESERVED3;         /*!< Reserved,                                                                 0x2A */
 }GPIO_TypeDef;
 
-/** 
+/**
   * @brief SysTem Configuration
   */
 
@@ -456,7 +456,7 @@ typedef struct
   __IO uint32_t CFGR2;       /*!< SYSCFG configuration register 2,                           Address offset: 0x18 */
 } SYSCFG_TypeDef;
 
-/** 
+/**
   * @brief Inter-integrated Circuit Interface
   */
 
@@ -476,7 +476,7 @@ typedef struct
 }I2C_TypeDef;
 
 
-/** 
+/**
   * @brief Independent WATCHDOG
   */
 typedef struct
@@ -488,7 +488,7 @@ typedef struct
   __IO uint32_t WINR; /*!< IWDG Window register,    Address offset: 0x10 */
 } IWDG_TypeDef;
 
-/** 
+/**
   * @brief Power Control
   */
 
@@ -499,7 +499,7 @@ typedef struct
 } PWR_TypeDef;
 
 
-/** 
+/**
   * @brief Reset and Clock Control
   */
 typedef struct
@@ -512,7 +512,7 @@ typedef struct
   __IO uint32_t AHBENR;     /*!< RCC AHB peripheral clock register,                           Address offset: 0x14 */
   __IO uint32_t APB2ENR;    /*!< RCC APB2 peripheral clock enable register,                   Address offset: 0x18 */
   __IO uint32_t APB1ENR;    /*!< RCC APB1 peripheral clock enable register,                   Address offset: 0x1C */
-  __IO uint32_t BDCR;       /*!< RCC Backup domain control register,                          Address offset: 0x20 */ 
+  __IO uint32_t BDCR;       /*!< RCC Backup domain control register,                          Address offset: 0x20 */
   __IO uint32_t CSR;        /*!< RCC clock control & status register,                         Address offset: 0x24 */
   __IO uint32_t AHBRSTR;    /*!< RCC AHB peripheral reset register,                           Address offset: 0x28 */
   __IO uint32_t CFGR2;      /*!< RCC clock configuration register 2,                          Address offset: 0x2C */
@@ -520,12 +520,12 @@ typedef struct
   __IO uint32_t CR2;        /*!< RCC clock control register 2,                                Address offset: 0x34 */
 } RCC_TypeDef;
 
-/** 
+/**
   * @brief Real-Time Clock
   */
 
 typedef struct
-{                           
+{
   __IO uint32_t TR;         /*!< RTC time register,                                        Address offset: 0x00 */
   __IO uint32_t DR;         /*!< RTC date register,                                        Address offset: 0x04 */
   __IO uint32_t CR;         /*!< RTC control register,                                     Address offset: 0x08 */
@@ -554,10 +554,10 @@ typedef struct
 } RTC_TypeDef;
 
 
-/** 
+/**
   * @brief Serial Peripheral Interface
   */
-  
+
 typedef struct
 {
   __IO uint16_t CR1;      /*!< SPI Control register 1 (not used in I2S mode),       Address offset: 0x00 */
@@ -573,15 +573,15 @@ typedef struct
   __IO uint16_t RXCRCR;   /*!< SPI Rx CRC register (not used in I2S mode),          Address offset: 0x14 */
   uint16_t  RESERVED5;    /*!< Reserved, 0x16                                                            */
   __IO uint16_t TXCRCR;   /*!< SPI Tx CRC register (not used in I2S mode),          Address offset: 0x18 */
-  uint16_t  RESERVED6;    /*!< Reserved, 0x1A                                                            */ 
+  uint16_t  RESERVED6;    /*!< Reserved, 0x1A                                                            */
   __IO uint16_t I2SCFGR;  /*!< SPI_I2S configuration register,                      Address offset: 0x1C */
   uint16_t  RESERVED7;    /*!< Reserved, 0x1E                                                            */
   __IO uint16_t I2SPR;    /*!< SPI_I2S prescaler register,                          Address offset: 0x20 */
-  uint16_t  RESERVED8;    /*!< Reserved, 0x22                                                            */    
+  uint16_t  RESERVED8;    /*!< Reserved, 0x22                                                            */
 } SPI_TypeDef;
 
 
-/** 
+/**
   * @brief TIM
   */
 typedef struct
@@ -624,14 +624,14 @@ typedef struct
   uint16_t      RESERVED20;      /*!< Reserved,                                                    0x52 */
 } TIM_TypeDef;
 
-/** 
+/**
   * @brief Touch Sensing Controller (TSC)
   */
 typedef struct
 {
   __IO uint32_t CR;        /*!< TSC control register,                                     Address offset: 0x00 */
   __IO uint32_t IER;       /*!< TSC interrupt enable register,                            Address offset: 0x04 */
-  __IO uint32_t ICR;       /*!< TSC interrupt clear register,                             Address offset: 0x08 */ 
+  __IO uint32_t ICR;       /*!< TSC interrupt clear register,                             Address offset: 0x08 */
   __IO uint32_t ISR;       /*!< TSC interrupt status register,                            Address offset: 0x0C */
   __IO uint32_t IOHCR;     /*!< TSC I/O hysteresis control register,                      Address offset: 0x10 */
   __IO uint32_t RESERVED1; /*!< Reserved,                                                 Address offset: 0x14 */
@@ -645,20 +645,20 @@ typedef struct
   __IO uint32_t IOGXCR[6]; /*!< TSC I/O group x counter register,                         Address offset: 0x34-48 */
 } TSC_TypeDef;
 
-/** 
+/**
   * @brief Universal Synchronous Asynchronous Receiver Transmitter
   */
-  
+
 typedef struct
 {
-  __IO uint32_t CR1;    /*!< USART Control register 1,                 Address offset: 0x00 */ 
-  __IO uint32_t CR2;    /*!< USART Control register 2,                 Address offset: 0x04 */ 
+  __IO uint32_t CR1;    /*!< USART Control register 1,                 Address offset: 0x00 */
+  __IO uint32_t CR2;    /*!< USART Control register 2,                 Address offset: 0x04 */
   __IO uint32_t CR3;    /*!< USART Control register 3,                 Address offset: 0x08 */
   __IO uint16_t BRR;    /*!< USART Baud rate register,                 Address offset: 0x0C */
-  uint16_t  RESERVED1;  /*!< Reserved, 0x0E                                                 */  
+  uint16_t  RESERVED1;  /*!< Reserved, 0x0E                                                 */
   __IO uint16_t GTPR;   /*!< USART Guard time and prescaler register,  Address offset: 0x10 */
   uint16_t  RESERVED2;  /*!< Reserved, 0x12                                                 */
-  __IO uint32_t RTOR;   /*!< USART Receiver Time Out register,         Address offset: 0x14 */  
+  __IO uint32_t RTOR;   /*!< USART Receiver Time Out register,         Address offset: 0x14 */
   __IO uint16_t RQR;    /*!< USART Request register,                   Address offset: 0x18 */
   uint16_t  RESERVED3;  /*!< Reserved, 0x1A                                                 */
   __IO uint32_t ISR;    /*!< USART Interrupt and status register,      Address offset: 0x1C */
@@ -670,7 +670,7 @@ typedef struct
 } USART_TypeDef;
 
 
-/** 
+/**
   * @brief Window WATCHDOG
   */
 typedef struct
@@ -684,7 +684,7 @@ typedef struct
 /**
   * @}
   */
-  
+
 /** @addtogroup Peripheral_memory_map
   * @{
   */
@@ -747,10 +747,10 @@ typedef struct
 /**
   * @}
   */
-  
+
 /** @addtogroup Peripheral_declaration
   * @{
-  */  
+  */
 
 #define TIM2                ((TIM_TypeDef *) TIM2_BASE)
 #define TIM3                ((TIM_TypeDef *) TIM3_BASE)
@@ -787,7 +787,7 @@ typedef struct
 #define DMA1_Channel4       ((DMA_Channel_TypeDef *) DMA1_Channel4_BASE)
 #define DMA1_Channel5       ((DMA_Channel_TypeDef *) DMA1_Channel5_BASE)
 #define FLASH               ((FLASH_TypeDef *) FLASH_R_BASE)
-#define OB                  ((OB_TypeDef *) OB_BASE) 
+#define OB                  ((OB_TypeDef *) OB_BASE)
 #define RCC                 ((RCC_TypeDef *) RCC_BASE)
 #define CRC                 ((CRC_TypeDef *) CRC_BASE)
 #define TSC                 ((TSC_TypeDef *) TSC_BASE)
@@ -805,11 +805,11 @@ typedef struct
 /** @addtogroup Exported_constants
   * @{
   */
-  
+
   /** @addtogroup Peripheral_Registers_Bits_Definition
   * @{
   */
-    
+
 /******************************************************************************/
 /*                         Peripheral Registers Bits Definition               */
 /******************************************************************************/
@@ -1379,7 +1379,7 @@ typedef struct
 #define FLASH_FKEY1                          ((uint32_t)0x45670123)        /*!< Flash program erase key1 */
 #define FLASH_FKEY2                          ((uint32_t)0xCDEF89AB)        /*!< Flash program erase key2: used with FLASH_PEKEY1
                                                                                 to unlock the write access to the FPEC. */
-                                                               
+
 #define FLASH_OPTKEY1                        ((uint32_t)0x45670123)        /*!< Flash option key1 */
 #define FLASH_OPTKEY2                        ((uint32_t)0xCDEF89AB)        /*!< Flash option key2: used with FLASH_OPTKEY1 to
                                                                                 unlock the write access to the option byte block */
@@ -2152,7 +2152,7 @@ typedef struct
 #define  RCC_BDCR_RTCEN                      ((uint32_t)0x00008000)        /*!< RTC clock enable */
 #define  RCC_BDCR_BDRST                      ((uint32_t)0x00010000)        /*!< Backup domain software reset  */
 
-/*******************  Bit definition for RCC_CSR register  ********************/  
+/*******************  Bit definition for RCC_CSR register  ********************/
 #define  RCC_CSR_LSION                       ((uint32_t)0x00000001)        /*!< Internal Low Speed oscillator enable */
 #define  RCC_CSR_LSIRDY                      ((uint32_t)0x00000002)        /*!< Internal Low Speed oscillator Ready */
 #define  RCC_CSR_V18PWRRSTF                 ((uint32_t)0x00800000)        /*!< V1.8 power domain reset flag */
@@ -2204,9 +2204,9 @@ typedef struct
 #define  RCC_CFGR3_USART1SW_0                ((uint32_t)0x00000001)        /*!< Bit 0 */
 #define  RCC_CFGR3_USART1SW_1                ((uint32_t)0x00000002)        /*!< Bit 1 */
 /*!< I2C1 Clock source selection */
-#define  RCC_CFGR3_I2C1SW                    ((uint32_t)0x00000010)        /*!< I2C1SW bits */ 
-#define  RCC_CFGR3_CECSW                     ((uint32_t)0x00000040)        /*!< CECSW bits */ 
-#define  RCC_CFGR3_ADCSW                     ((uint32_t)0x00000100)        /*!< ADCSW bits */ 
+#define  RCC_CFGR3_I2C1SW                    ((uint32_t)0x00000010)        /*!< I2C1SW bits */
+#define  RCC_CFGR3_CECSW                     ((uint32_t)0x00000040)        /*!< CECSW bits */
+#define  RCC_CFGR3_ADCSW                     ((uint32_t)0x00000100)        /*!< ADCSW bits */
 
 /*******************  Bit definition for RCC_CR2 register  ********************/
 #define  RCC_CR2_HSI14ON                     ((uint32_t)0x00000001)        /*!< Internal High Speed 14MHz clock enable */
@@ -2536,7 +2536,7 @@ typedef struct
 #define  SPI_SR_FRLVL_1                      ((uint16_t)0x0400)            /*!< Bit 1 */
 #define  SPI_SR_FTLVL                        ((uint16_t)0x1800)            /*!< FIFO Transmission Level */
 #define  SPI_SR_FTLVL_0                      ((uint16_t)0x0800)            /*!< Bit 0 */
-#define  SPI_SR_FTLVL_1                      ((uint16_t)0x1000)            /*!< Bit 1 */  
+#define  SPI_SR_FTLVL_1                      ((uint16_t)0x1000)            /*!< Bit 1 */
 
 /********************  Bit definition for SPI_DR register  ********************/
 #define  SPI_DR_DR                           ((uint16_t)0xFFFF)            /*!< Data Register */
@@ -2599,32 +2599,32 @@ typedef struct
 #define SYSCFG_EXTICR1_EXTI2            ((uint16_t)0x0F00) /*!< EXTI 2 configuration */
 #define SYSCFG_EXTICR1_EXTI3            ((uint16_t)0xF000) /*!< EXTI 3 configuration */
 
-/** 
-  * @brief  EXTI0 configuration  
+/**
+  * @brief  EXTI0 configuration
   */
 #define SYSCFG_EXTICR1_EXTI0_PA         ((uint16_t)0x0000) /*!< PA[0] pin */
 #define SYSCFG_EXTICR1_EXTI0_PB         ((uint16_t)0x0001) /*!< PB[0] pin */
 #define SYSCFG_EXTICR1_EXTI0_PC         ((uint16_t)0x0002) /*!< PC[0] pin */
 #define SYSCFG_EXTICR1_EXTI0_PF         ((uint16_t)0x0003) /*!< PF[0] pin */
 
-/** 
-  * @brief  EXTI1 configuration  
-  */ 
+/**
+  * @brief  EXTI1 configuration
+  */
 #define SYSCFG_EXTICR1_EXTI1_PA         ((uint16_t)0x0000) /*!< PA[1] pin */
 #define SYSCFG_EXTICR1_EXTI1_PB         ((uint16_t)0x0010) /*!< PB[1] pin */
 #define SYSCFG_EXTICR1_EXTI1_PC         ((uint16_t)0x0020) /*!< PC[1] pin */
 #define SYSCFG_EXTICR1_EXTI1_PF         ((uint16_t)0x0030) /*!< PF[1] pin */
 
-/** 
-  * @brief  EXTI2 configuration  
+/**
+  * @brief  EXTI2 configuration
   */
 #define SYSCFG_EXTICR1_EXTI2_PA         ((uint16_t)0x0000) /*!< PA[2] pin */
 #define SYSCFG_EXTICR1_EXTI2_PB         ((uint16_t)0x0100) /*!< PB[2] pin */
 #define SYSCFG_EXTICR1_EXTI2_PC         ((uint16_t)0x0200) /*!< PC[2] pin */
 #define SYSCFG_EXTICR1_EXTI2_PD         ((uint16_t)0x0300) /*!< PD[2] pin */
 
-/** 
-  * @brief  EXTI3 configuration  
+/**
+  * @brief  EXTI3 configuration
   */
 #define SYSCFG_EXTICR1_EXTI3_PA         ((uint16_t)0x0000) /*!< PA[3] pin */
 #define SYSCFG_EXTICR1_EXTI3_PB         ((uint16_t)0x1000) /*!< PB[3] pin */
@@ -2636,32 +2636,32 @@ typedef struct
 #define SYSCFG_EXTICR2_EXTI6            ((uint16_t)0x0F00) /*!< EXTI 6 configuration */
 #define SYSCFG_EXTICR2_EXTI7            ((uint16_t)0xF000) /*!< EXTI 7 configuration */
 
-/** 
-  * @brief  EXTI4 configuration  
+/**
+  * @brief  EXTI4 configuration
   */
 #define SYSCFG_EXTICR2_EXTI4_PA         ((uint16_t)0x0000) /*!< PA[4] pin */
 #define SYSCFG_EXTICR2_EXTI4_PB         ((uint16_t)0x0001) /*!< PB[4] pin */
 #define SYSCFG_EXTICR2_EXTI4_PC         ((uint16_t)0x0002) /*!< PC[4] pin */
 #define SYSCFG_EXTICR2_EXTI4_PF         ((uint16_t)0x0003) /*!< PF[4] pin */
 
-/** 
-  * @brief  EXTI5 configuration  
+/**
+  * @brief  EXTI5 configuration
   */
 #define SYSCFG_EXTICR2_EXTI5_PA         ((uint16_t)0x0000) /*!< PA[5] pin */
 #define SYSCFG_EXTICR2_EXTI5_PB         ((uint16_t)0x0010) /*!< PB[5] pin */
 #define SYSCFG_EXTICR2_EXTI5_PC         ((uint16_t)0x0020) /*!< PC[5] pin */
 #define SYSCFG_EXTICR2_EXTI5_PF         ((uint16_t)0x0030) /*!< PF[5] pin */
 
-/** 
-  * @brief  EXTI6 configuration  
+/**
+  * @brief  EXTI6 configuration
   */
 #define SYSCFG_EXTICR2_EXTI6_PA         ((uint16_t)0x0000) /*!< PA[6] pin */
 #define SYSCFG_EXTICR2_EXTI6_PB         ((uint16_t)0x0100) /*!< PB[6] pin */
 #define SYSCFG_EXTICR2_EXTI6_PC         ((uint16_t)0x0200) /*!< PC[6] pin */
 #define SYSCFG_EXTICR2_EXTI6_PF         ((uint16_t)0x0300) /*!< PF[6] pin */
 
-/** 
-  * @brief  EXTI7 configuration  
+/**
+  * @brief  EXTI7 configuration
   */
 #define SYSCFG_EXTICR2_EXTI7_PA         ((uint16_t)0x0000) /*!< PA[7] pin */
 #define SYSCFG_EXTICR2_EXTI7_PB         ((uint16_t)0x1000) /*!< PB[7] pin */
@@ -2674,29 +2674,29 @@ typedef struct
 #define SYSCFG_EXTICR3_EXTI10           ((uint16_t)0x0F00) /*!< EXTI 10 configuration */
 #define SYSCFG_EXTICR3_EXTI11           ((uint16_t)0xF000) /*!< EXTI 11 configuration */
 
-/** 
-  * @brief  EXTI8 configuration  
+/**
+  * @brief  EXTI8 configuration
   */
 #define SYSCFG_EXTICR3_EXTI8_PA         ((uint16_t)0x0000) /*!< PA[8] pin */
 #define SYSCFG_EXTICR3_EXTI8_PB         ((uint16_t)0x0001) /*!< PB[8] pin */
 #define SYSCFG_EXTICR3_EXTI8_PC         ((uint16_t)0x0002) /*!< PC[8] pin */
 
-/** 
-  * @brief  EXTI9 configuration  
+/**
+  * @brief  EXTI9 configuration
   */
 #define SYSCFG_EXTICR3_EXTI9_PA         ((uint16_t)0x0000) /*!< PA[9] pin */
 #define SYSCFG_EXTICR3_EXTI9_PB         ((uint16_t)0x0010) /*!< PB[9] pin */
 #define SYSCFG_EXTICR3_EXTI9_PC         ((uint16_t)0x0020) /*!< PC[9] pin */
 
-/** 
-  * @brief  EXTI10 configuration  
+/**
+  * @brief  EXTI10 configuration
   */
 #define SYSCFG_EXTICR3_EXTI10_PA        ((uint16_t)0x0000) /*!< PA[10] pin */
 #define SYSCFG_EXTICR3_EXTI10_PB        ((uint16_t)0x0100) /*!< PB[10] pin */
 #define SYSCFG_EXTICR3_EXTI10_PC        ((uint16_t)0x0200) /*!< PC[10] pin */
 
-/** 
-  * @brief  EXTI11 configuration  
+/**
+  * @brief  EXTI11 configuration
   */
 #define SYSCFG_EXTICR3_EXTI11_PA        ((uint16_t)0x0000) /*!< PA[11] pin */
 #define SYSCFG_EXTICR3_EXTI11_PB        ((uint16_t)0x1000) /*!< PB[11] pin */
@@ -2708,29 +2708,29 @@ typedef struct
 #define SYSCFG_EXTICR4_EXTI14           ((uint16_t)0x0F00) /*!< EXTI 14 configuration */
 #define SYSCFG_EXTICR4_EXTI15           ((uint16_t)0xF000) /*!< EXTI 15 configuration */
 
-/** 
-  * @brief  EXTI12 configuration  
+/**
+  * @brief  EXTI12 configuration
   */
 #define SYSCFG_EXTICR4_EXTI12_PA        ((uint16_t)0x0000) /*!< PA[12] pin */
 #define SYSCFG_EXTICR4_EXTI12_PB        ((uint16_t)0x0001) /*!< PB[12] pin */
 #define SYSCFG_EXTICR4_EXTI12_PC        ((uint16_t)0x0002) /*!< PC[12] pin */
 
-/** 
-  * @brief  EXTI13 configuration  
+/**
+  * @brief  EXTI13 configuration
   */
 #define SYSCFG_EXTICR4_EXTI13_PA        ((uint16_t)0x0000) /*!< PA[13] pin */
 #define SYSCFG_EXTICR4_EXTI13_PB        ((uint16_t)0x0010) /*!< PB[13] pin */
 #define SYSCFG_EXTICR4_EXTI13_PC        ((uint16_t)0x0020) /*!< PC[13] pin */
 
-/** 
-  * @brief  EXTI14 configuration  
+/**
+  * @brief  EXTI14 configuration
   */
 #define SYSCFG_EXTICR4_EXTI14_PA        ((uint16_t)0x0000) /*!< PA[14] pin */
 #define SYSCFG_EXTICR4_EXTI14_PB        ((uint16_t)0x0100) /*!< PB[14] pin */
 #define SYSCFG_EXTICR4_EXTI14_PC        ((uint16_t)0x0200) /*!< PC[14] pin */
 
-/** 
-  * @brief  EXTI15 configuration  
+/**
+  * @brief  EXTI15 configuration
   */
 #define SYSCFG_EXTICR4_EXTI15_PA        ((uint16_t)0x0000) /*!< PA[15] pin */
 #define SYSCFG_EXTICR4_EXTI15_PB        ((uint16_t)0x1000) /*!< PB[15] pin */
@@ -3235,7 +3235,7 @@ typedef struct
 
  /**
   * @}
-  */ 
+  */
 
 #ifdef USE_STDPERIPH_DRIVER
   #include "stm32f0xx_conf.h"
