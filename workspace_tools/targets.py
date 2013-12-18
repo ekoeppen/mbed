@@ -261,6 +261,17 @@ class STM32F103(Target):
         self.supported_toolchains = ["GCC_ARM"]
 
 
+class STM32F030(Target):
+    def __init__(self):
+        Target.__init__(self)
+
+        self.core = "Cortex-M0"
+
+        self.extra_labels = ['STM', 'STM32F030']
+
+        self.supported_toolchains = ["GCC_ARM"]
+
+
 class MBED_MCU(Target):
     def __init__(self):
         Target.__init__(self)
@@ -329,6 +340,7 @@ TARGETS = [
     LPC4330_M4(),
     STM32F407(),
     STM32F103(),
+    STM32F030(),
     MBED_MCU(),
     LPC1347(),
     LPC1114(),
