@@ -25,7 +25,7 @@
 #define DEVICE_ANALOGIN         0
 #define DEVICE_ANALOGOUT        0
 
-#define DEVICE_SERIAL           0
+#define DEVICE_SERIAL           1
 
 #define DEVICE_I2C              0
 #define DEVICE_I2CSLAVE         0
@@ -39,7 +39,7 @@
 
 #define DEVICE_ETHERNET         0
 
-#define DEVICE_PWMOUT           0
+#define DEVICE_PWMOUT           1
 
 #define DEVICE_SLEEP            0
 
