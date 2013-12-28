@@ -43,8 +43,8 @@ struct port_s {
 };
 
 struct pwmout_s {
-    __IO uint32_t *MR;
-    PWMName pwm;
+    TIM_TypeDef *timer;
+    int channel;
 };
 
 struct serial_s {

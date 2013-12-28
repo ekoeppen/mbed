@@ -47,20 +47,41 @@ typedef enum {
 
 typedef enum {
     SPI_1 = (int)SPI1_BASE,
+    SPI_2 = (int)SPI2_BASE,
 } SPIName;
 
 typedef enum {
     I2C_1 = (int)I2C1_BASE,
+    I2C_2 = (int)I2C2_BASE,
 } I2CName;
 
 typedef enum {
-    PWM_1 = 1,
-    PWM_2,
-    PWM_3,
-    PWM_4,
-    PWM_5,
-    PWM_6
-} PWMName;
+    TIM_1 =    (int)TIM1_BASE,
+    TIM_1_1 =  (int)TIM1_BASE + 1,
+    TIM_1_2 =  (int)TIM1_BASE + 2,
+    TIM_1_3 =  (int)TIM1_BASE + 4,
+    TIM_1_4 =  (int)TIM1_BASE + 4,
+    TIM_3 =    (int)TIM3_BASE,
+    TIM_3_1 =  (int)TIM3_BASE + 1,
+    TIM_3_2 =  (int)TIM3_BASE + 2,
+    TIM_3_3 =  (int)TIM3_BASE + 3,
+    TIM_3_4 =  (int)TIM3_BASE + 4,
+    TIM_14 =   (int)TIM14_BASE,
+    TIM_14_1 = (int)TIM14_BASE + 1,
+    TIM_14_2 = (int)TIM14_BASE + 2,
+    TIM_14_3 = (int)TIM14_BASE + 3,
+    TIM_14_4 = (int)TIM14_BASE + 4,
+    TIM_16 =   (int)TIM16_BASE,
+    TIM_16_1 = (int)TIM16_BASE + 1,
+    TIM_16_2 = (int)TIM16_BASE + 2,
+    TIM_16_3 = (int)TIM16_BASE + 3,
+    TIM_16_4 = (int)TIM16_BASE + 4,
+    TIM_17 =   (int)TIM17_BASE,
+    TIM_17_1 = (int)TIM17_BASE + 1,
+    TIM_17_2 = (int)TIM17_BASE + 2,
+    TIM_17_3 = (int)TIM17_BASE + 3,
+    TIM_17_4 = (int)TIM17_BASE + 4,
+} TimerName;
 
 #define STDIO_UART_TX     PA_9
 #define STDIO_UART_RX     PA_10

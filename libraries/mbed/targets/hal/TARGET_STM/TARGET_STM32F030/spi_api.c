@@ -23,42 +23,34 @@
 #include "error.h"
 
 static const PinMap PinMap_SPI_SCLK[] = {
-    {PA_5,  SPI_1, STM_PIN_DATA(2, 5)},
-    {PB_3,  SPI_1, STM_PIN_DATA(2, 5)},
-    {PB_3,  SPI_3, STM_PIN_DATA(2, 6)},
-    {PB_10, SPI_2, STM_PIN_DATA(2, 5)},
-    {PB_13, SPI_2, STM_PIN_DATA(2, 5)},
-    {PC_10, SPI_3, STM_PIN_DATA(2, 6)},
+    {PA_5,  SPI_1, STM_PIN_DATA(2, 0)},
+    {PB_3,  SPI_1, STM_PIN_DATA(2, 0)},
+    {PB_13, SPI_2, STM_PIN_DATA(2, 0)},
+    {PB_13, SPI_1, STM_PIN_DATA(2, 0)},
     {NC,    NC,    0}
 };
 
 static const PinMap PinMap_SPI_MOSI[] = {
-    {PA_7,  SPI_1, STM_PIN_DATA(2, 5)},
-    {PB_5,  SPI_1, STM_PIN_DATA(2, 5)},
-    {PB_5,  SPI_3, STM_PIN_DATA(2, 6)},
-    {PB_15, SPI_2, STM_PIN_DATA(2, 5)},
-    {PC_3,  SPI_2, STM_PIN_DATA(2, 5)},
-    {PC_12, SPI_3, STM_PIN_DATA(2, 6)},
+    {PA_7,  SPI_1, STM_PIN_DATA(2, 0)},
+    {PB_5,  SPI_1, STM_PIN_DATA(2, 0)},
+    {PB_15, SPI_2, STM_PIN_DATA(2, 0)},
+    {PB_15, SPI_1, STM_PIN_DATA(2, 0)},
     {NC,    NC,    0}
 };
 
 static const PinMap PinMap_SPI_MISO[] = {
-    {PA_6,  SPI_1, STM_PIN_DATA(2, 5)},
-    {PB_4,  SPI_1, STM_PIN_DATA(2, 5)},
-    {PB_4,  SPI_3, STM_PIN_DATA(2, 6)},
-    {PB_14, SPI_2, STM_PIN_DATA(2, 5)},
-    {PC_2,  SPI_2, STM_PIN_DATA(2, 5)},
-    {PC_11, SPI_3, STM_PIN_DATA(2, 6)},
+    {PA_6,  SPI_1, STM_PIN_DATA(2, 0)},
+    {PB_4,  SPI_1, STM_PIN_DATA(2, 0)},
+    {PB_14, SPI_2, STM_PIN_DATA(2, 0)},
+    {PB_14, SPI_1, STM_PIN_DATA(2, 0)},
     {NC,    NC,    0}
 };
 
 static const PinMap PinMap_SPI_SSEL[] = {
-    {PA_4,  SPI_1, STM_PIN_DATA(2, 5)},
-    {PA_4,  SPI_3, STM_PIN_DATA(2, 6)},
-    {PA_15, SPI_1, STM_PIN_DATA(2, 5)},
-    {PA_15, SPI_3, STM_PIN_DATA(2, 6)},
-    {PB_9,  SPI_2, STM_PIN_DATA(2, 5)}, 
-    {PB_12, SPI_2, STM_PIN_DATA(2, 5)},
+    {PA_4,  SPI_1, STM_PIN_DATA(2, 0)},
+    {PA_15, SPI_1, STM_PIN_DATA(2, 0)},
+    {PB_12, SPI_2, STM_PIN_DATA(2, 0)},
+    {PB_12, SPI_1, STM_PIN_DATA(2, 0)},
     {NC,    NC,    0}
 };
 
@@ -82,19 +74,15 @@ void spi_init(spi_t *obj, PinName mosi, PinName miso, PinName sclk, PinName ssel
     // enable power and clocking
     switch ((int)obj->spi) {
         case SPI_1:
-            RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN | RCC_AHB1ENR_GPIOBEN;
+            RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
             RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
             break;
         case SPI_2:
-            RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN | RCC_AHB1ENR_GPIOCEN;
             RCC->APB1ENR |= RCC_APB1ENR_SPI2EN;
             break;
-        case SPI_3:
-            RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN | RCC_AHB1ENR_GPIOCEN;
-            RCC->APB1ENR |= RCC_APB1ENR_SPI3EN;
-            break;
     }
-    
+    RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
+
 
     // set default format and frequency
     if (ssel == NC) {
@@ -103,7 +91,7 @@ void spi_init(spi_t *obj, PinName mosi, PinName miso, PinName sclk, PinName ssel
         spi_format(obj, 8, 0, 1);  // 8 bits, mode 0, slave
     }
     spi_frequency(obj, 1000000);
-    
+
     // enable the ssp channel
     ssp_enable(obj);
 
@@ -124,11 +112,11 @@ void spi_free(spi_t *obj) {}
 
 void spi_format(spi_t *obj, int bits, int mode, int slave) {
     ssp_disable(obj);
-    
+
     if (!(bits == 8 || bits == 16) || !(mode >= 0 && mode <= 3)) {
         error("SPI format error");
     }
-    
+
 
     int polarity = (mode & 0x2) ? 1 : 0;
     int phase = (mode & 0x1) ? 1 : 0;
@@ -155,7 +143,6 @@ void spi_frequency(spi_t *obj, int hz) {
     switch ((int)obj->spi) {
         case SPI_1: PCLK = PCLK >> 1; break;
         case SPI_2: PCLK = PCLK >> 2; break;
-        case SPI_3: PCLK = PCLK >> 2; break;
     }
 
     // Choose the baud rate divisor (between 2 and 256)
