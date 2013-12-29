@@ -52,29 +52,22 @@ void analogin_init(analogin_t *obj, PinName pin) {
         error("ADC pin mapping failed");
     }
 
-    // ensure power is turned on
-    RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOBEN |
-                    RCC_AHBENR_GPIOCEN;
+    RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOBEN | RCC_AHBENR_GPIOCEN;
     RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;
 
-    // Enable the ADC
-    //ADC1->CR2 |= ADC_CR2_ADON;
+    ADC1->CR |= ADC_CR_ADEN;
+    while (!(ADC1->ISR & ADC_ISR_ADRDY)) ;
 
     pinmap_pinout(pin, PinMap_ADC);
 }
 
 static inline uint32_t adc_read(analogin_t *obj) {
-    // Select the appropriate channel
-    //ADC1->SQR3 = (int) obj->adc;
-
-    // Start conversion
-    //ADC1->CR2 |= ADC_CR2_SWSTART;
-
-    // Wait for conversion to finish
-    //while (!(ADC1->SR & ADC_SR_EOC));
-
+    ADC1->CHSELR = (1 << (int) obj->adc);
+    ADC1->SMPR = ADC_SMPR1_SMPR_0 | ADC_SMPR1_SMPR_1;
+    ADC1->CR |= ADC_CR_ADSTART;
+    while (!(ADC1->ISR & ADC_ISR_EOC));
     uint32_t data = ADC1->DR;
-    return data; // 12 bit
+    return data;
 }
 
 static inline uint32_t adc_read_u32(analogin_t *obj) {
