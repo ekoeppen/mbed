@@ -22,24 +22,20 @@
 #include "error.h"
 
 static const PinMap PinMap_I2C_SDA[] = {
-    {PB_7,  I2C_1, STM_PIN_DATA(2, 4)},
-    {PB_9,  I2C_1, STM_PIN_DATA(2, 4)},
-    {PB_11, I2C_2, STM_PIN_DATA(2, 4)},
-    {PC_9,  I2C_3, STM_PIN_DATA(2, 4)},
-    {PF_0,  I2C_2, STM_PIN_DATA(2, 4)},
-    {PH_5,  I2C_2, STM_PIN_DATA(2, 4)},
-    {PH_8,  I2C_3, STM_PIN_DATA(2, 4)},
+    {PA_10, I2C_1, STM_PIN_DATA(2, 4)},
+    {PB_7,  I2C_1, STM_PIN_DATA(2, 1)},
+    {PB_9,  I2C_1, STM_PIN_DATA(2, 1)},
+    {PB_11, I2C_2, STM_PIN_DATA(2, 1)},
+    {PB_11, I2C_1, STM_PIN_DATA(2, 1)},
     {NC,    NC,    0}
 };
 
 static const PinMap PinMap_I2C_SCL[] = {
-    {PA_8,  I2C_3, STM_PIN_DATA(2, 4)},
-    {PB_6,  I2C_1, STM_PIN_DATA(2, 4)},
-    {PB_8,  I2C_1, STM_PIN_DATA(2, 4)},
-    {PB_10, I2C_2, STM_PIN_DATA(2, 4)},
-    {PF_1,  I2C_2, STM_PIN_DATA(2, 4)},
-    {PH_4,  I2C_2, STM_PIN_DATA(2, 4)},
-    {PH_7,  I2C_3, STM_PIN_DATA(2, 4)},
+    {PA_9,  I2C_1, STM_PIN_DATA(2, 4)},
+    {PB_6,  I2C_1, STM_PIN_DATA(2, 1)},
+    {PB_8,  I2C_1, STM_PIN_DATA(2, 1)},
+    {PB_10, I2C_2, STM_PIN_DATA(2, 1)},
+    {PB_10, I2C_1, STM_PIN_DATA(2, 1)},
     {NC,    NC,    0}
 };
 
@@ -61,62 +57,25 @@ static inline void i2c_interface_disable(i2c_t *obj) {
 static inline void i2c_power_enable(i2c_t *obj) {
     switch ((int)obj->i2c) {
         case I2C_1:
-            RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
+            RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOBEN;
             RCC->APB1ENR |= RCC_APB1ENR_I2C1EN;
             break;
         case I2C_2:
-            RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN | RCC_AHB1ENR_GPIOFEN |
-                            RCC_AHB1ENR_GPIOHEN;
+            RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
             RCC->APB1ENR |= RCC_APB1ENR_I2C2EN;
-            break;
-        case I2C_3:
-            RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN | RCC_AHB1ENR_GPIOCEN |
-                            RCC_AHB1ENR_GPIOHEN;
-            RCC->APB1ENR |= RCC_APB1ENR_I2C3EN;
             break;
     }
 }
 
-static inline void i2c_wait_status(i2c_t *obj, uint32_t sr1_mask,
-                                   uint32_t sr2_mask) {
-    while (!(((obj->i2c->SR1 & sr1_mask) >= sr1_mask) &&
-             ((obj->i2c->SR2 & sr2_mask) == sr2_mask)));
-}
-
-// Wait until the slave address has been acknowledged
-static inline void i2c_wait_addr_tx(i2c_t *obj) {
-    uint32_t sr1_mask = I2C_SR1_ADDR | I2C_SR1_TXE;
-    uint32_t sr2_mask = I2C_SR2_MSL | I2C_SR2_BUSY | I2C_SR2_TRA;
-    i2c_wait_status(obj, sr1_mask, sr2_mask);
-}
-
-// Wait until the slave address has been acknowledged
-static inline void i2c_wait_addr_rx(i2c_t *obj) {
-    uint32_t sr1_mask = I2C_SR1_ADDR;
-    uint32_t sr2_mask = I2C_SR2_MSL | I2C_SR2_BUSY;
-    i2c_wait_status(obj, sr1_mask, sr2_mask);
-}
-
-
-// Wait until a byte has been sent
 static inline void i2c_wait_send(i2c_t *obj) {
-    uint32_t sr1_mask = I2C_SR1_BTF | I2C_SR1_TXE;
-    uint32_t sr2_mask = I2C_SR2_MSL | I2C_SR2_BUSY | I2C_SR2_TRA;
-    i2c_wait_status(obj, sr1_mask, sr2_mask);
 }
 
 // Wait until a byte has been received
 static inline void i2c_wait_receive(i2c_t *obj) {
-    uint32_t sr1_mask = I2C_SR1_RXNE;
-    uint32_t sr2_mask = I2C_SR2_MSL | I2C_SR2_BUSY;
-    i2c_wait_status(obj, sr1_mask, sr2_mask);
 }
 
 // Wait until the start condition has been accepted
 static inline void i2c_wait_start(i2c_t *obj) {
-    uint32_t sr1_mask = I2C_SR1_SB;
-    uint32_t sr2_mask = I2C_SR2_MSL | I2C_SR2_BUSY;
-    i2c_wait_status(obj, sr1_mask, sr2_mask);
 }
 
 void i2c_init(i2c_t *obj, PinName sda, PinName scl) {
@@ -124,7 +83,7 @@ void i2c_init(i2c_t *obj, PinName sda, PinName scl) {
     I2CName i2c_sda = (I2CName)pinmap_peripheral(sda, PinMap_I2C_SDA);
     I2CName i2c_scl = (I2CName)pinmap_peripheral(scl, PinMap_I2C_SCL);
     obj->i2c = (I2C_TypeDef *)pinmap_merge(i2c_sda, i2c_scl);
-    
+
     if ((int)obj->i2c == NC) {
         error("I2C pin mapping failed");
     }
@@ -154,10 +113,10 @@ void i2c_init(i2c_t *obj, PinName sda, PinName scl) {
 
 inline int i2c_start(i2c_t *obj) {
     // Wait until we are not busy any more
-    while (obj->i2c->SR2 & I2C_SR2_BUSY);
+    while (obj->i2c->ISR & I2C_ISR_BUSY);
 
     // Generate the start condition
-    obj->i2c->CR1 |= I2C_CR1_START;
+    obj->i2c->CR2 |= I2C_CR2_START;
     i2c_wait_start(obj);
 
     return 0;
@@ -165,7 +124,7 @@ inline int i2c_start(i2c_t *obj) {
 
 inline int i2c_stop(i2c_t *obj) {
     // Generate the stop condition
-    obj->i2c->CR1 |= I2C_CR1_STOP;
+    obj->i2c->CR2 |= I2C_CR2_STOP;
     return 0;
 }
 
@@ -235,7 +194,7 @@ int i2c_read(i2c_t *obj, int address, char *data, int length, int stop) {
     i2c_do_write(obj, (address | 0x01), 1);
 
     // Wait until we have transmitted and the ADDR byte is set
-    i2c_wait_addr_rx(obj);
+    i2c_wait_send(obj);
 
     // Read in all except last byte
     for (count = 0; count < (length - 1); count++) {
@@ -262,7 +221,7 @@ int i2c_write(i2c_t *obj, int address, const char *data, int length, int stop) {
 
     // Send the slave address
     i2c_do_write(obj, (address & 0xFE), 1);
-    i2c_wait_addr_tx(obj);
+    i2c_wait_send(obj);
 
     for (i=0; i<length; i++) {
         i2c_do_write(obj, data[i], 0);

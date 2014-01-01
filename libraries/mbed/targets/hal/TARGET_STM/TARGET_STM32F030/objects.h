@@ -62,6 +62,7 @@ struct i2c_s {
 
 struct spi_s {
     SPI_TypeDef *spi;
+    int data_size;
 };
 
 #include "gpio_object.h"

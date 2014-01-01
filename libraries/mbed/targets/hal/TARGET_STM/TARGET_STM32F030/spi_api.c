@@ -55,8 +55,8 @@ static const PinMap PinMap_SPI_SSEL[] = {
 };
 
 
-static inline int ssp_disable(spi_t *obj);
-static inline int ssp_enable(spi_t *obj);
+static inline int spi_disable(spi_t *obj);
+static inline int spi_enable(spi_t *obj);
 
 void spi_init(spi_t *obj, PinName mosi, PinName miso, PinName sclk, PinName ssel) {
     // determine the SPI to use
@@ -92,8 +92,8 @@ void spi_init(spi_t *obj, PinName mosi, PinName miso, PinName sclk, PinName ssel
     }
     spi_frequency(obj, 1000000);
 
-    // enable the ssp channel
-    ssp_enable(obj);
+    // enable the spi channel
+    spi_enable(obj);
 
     // pin out the spi pins
     pinmap_pinout(mosi, PinMap_SPI_MOSI);
@@ -111,31 +111,34 @@ void spi_init(spi_t *obj, PinName mosi, PinName miso, PinName sclk, PinName ssel
 void spi_free(spi_t *obj) {}
 
 void spi_format(spi_t *obj, int bits, int mode, int slave) {
-    ssp_disable(obj);
+    spi_disable(obj);
 
-    if (!(bits == 8 || bits == 16) || !(mode >= 0 && mode <= 3)) {
+    if (!(bits >= 4 || bits <= 16) || !(mode >= 0 && mode <= 3)) {
         error("SPI format error");
     }
-
+    obj->data_size = bits;
+    if (bits <= 8) obj->spi->CR2 |= SPI_CR2_FRXTH;
 
     int polarity = (mode & 0x2) ? 1 : 0;
     int phase = (mode & 0x1) ? 1 : 0;
 
-    obj->spi->CR1 &= ~0x807;
-    obj->spi->CR1 |= ((phase) ? 1 : 0) << 0 |
-                     ((polarity) ? 1 : 0) << 1 |
-                     ((slave) ? 0: 1) << 2 |
-                     ((bits == 16) ? 1 : 0) << 11;
+    obj->spi->CR1 &= ~(SPI_CR1_MSTR | SPI_CR1_CPHA | SPI_CR1_CPOL);
+    obj->spi->CR1 |= ((phase) ? SPI_CR1_CPHA : 0) |
+                     ((polarity) ? SPI_CR1_CPOL : 0) |
+                     ((slave) ? 0 : SPI_CR1_MSTR);
+
+    obj->spi->CR2 &= ~(SPI_CR2_DS);
+    obj->spi->CR2 |= ((bits - 1) << 8);
 
     if (obj->spi->SR & SPI_SR_MODF) {
         obj->spi->CR1 = obj->spi->CR1;
     }
 
-    ssp_enable(obj);
+    spi_enable(obj);
 }
 
 void spi_frequency(spi_t *obj, int hz) {
-    ssp_disable(obj);
+    spi_disable(obj);
 
     // SPI1 runs from PCLK2, which runs at SystemCoreClock / 2.  SPI2 and SPI3
     // run from PCLK1, which runs at SystemCoreClock / 4.
@@ -163,47 +166,47 @@ void spi_frequency(spi_t *obj, int hz) {
     obj->spi->CR1 &= ~(0x7 << 3);
     obj->spi->CR1 |= baud_rate << 3;
 
-    ssp_enable(obj);
+    spi_enable(obj);
 }
 
-static inline int ssp_disable(spi_t *obj) {
+static inline int spi_disable(spi_t *obj) {
     // TODO: Follow the instructions in 25.3.8 for safely disabling the SPI
     return obj->spi->CR1 &= ~SPI_CR1_SPE;
 }
 
-static inline int ssp_enable(spi_t *obj) {
+static inline int spi_enable(spi_t *obj) {
     return obj->spi->CR1 |= SPI_CR1_SPE;
 }
 
-static inline int ssp_readable(spi_t *obj) {
+static inline int spi_readable(spi_t *obj) {
     return obj->spi->SR & SPI_SR_RXNE;
 }
 
-static inline int ssp_writeable(spi_t *obj) {
+static inline int spi_writeable(spi_t *obj) {
     return obj->spi->SR & SPI_SR_TXE;
 }
 
-static inline void ssp_write(spi_t *obj, int value) {
-    while (!ssp_writeable(obj));
-    obj->spi->DR = value;
+static inline void spi_write(spi_t *obj, int value) {
+    while (!spi_writeable(obj));
+    if (obj->data_size > 8) {
+        obj->spi->DR = (uint16_t) value;
+    } else {
+        *(uint8_t *) &obj->spi->DR = (uint8_t) value;
+    }
 }
 
-static inline int ssp_read(spi_t *obj) {
-    while (!ssp_readable(obj));
+static inline int spi_read(spi_t *obj) {
+    while (!spi_readable(obj));
     return obj->spi->DR;
 }
 
-static inline int ssp_busy(spi_t *obj) {
-    return (obj->spi->SR & SPI_SR_BSY) ? (1) : (0);
-}
-
 int spi_master_write(spi_t *obj, int value) {
-    ssp_write(obj, value);
-    return ssp_read(obj);
+    spi_write(obj, value);
+    return spi_read(obj);
 }
 
 int spi_slave_receive(spi_t *obj) {
-    return (ssp_readable(obj) && !ssp_busy(obj)) ? (1) : (0);
+    return (spi_readable(obj) && !spi_busy(obj)) ? (1) : (0);
 };
 
 int spi_slave_read(spi_t *obj) {
@@ -211,12 +214,12 @@ int spi_slave_read(spi_t *obj) {
 }
 
 void spi_slave_write(spi_t *obj, int value) {
-    while (ssp_writeable(obj) == 0) ;
+    while (spi_writeable(obj) == 0) ;
     obj->spi->DR = value;
 }
 
 int spi_busy(spi_t *obj) {
-    return ssp_busy(obj);
+    return (obj->spi->SR & SPI_SR_BSY) ? (1) : (0);
 }
 
 #endif
